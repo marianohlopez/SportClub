@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Inscription"
+    android:background="#00203F"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/deportivo_mandiyu"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="34dp"
+        android:padding="10dp"/>
+
+    <EditText
+        android:id="@+id/etLastName"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:hint="Apellido"
+        android:inputType="textPassword"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="34dp"
+        android:padding="10dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerOptions"
+        android:layout_width="310dp"
+        android:layout_height="45dp"
+        android:hint="Tipo"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="34dp"/>
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:hint="Nº de documento"
+        android:inputType="textPassword"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="30dp"
+        android:padding="10dp"/>
+
+    <CheckBox
+        android:id="@+id/checkboxHealth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="APTO FÍSICO"
+        android:textSize="17dp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="14dp"
+        app:buttonTint="#FFFFFF"
+        app:backgroundTint="#00203F"/>
+
+    <Button
+        android:id="@+id/btnInscription"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:text="INSCRIBIR SOCIO"
+        android:backgroundTint="#2196F3"
+        android:layout_marginBottom="16dp"
+        />
+    <Button
+        android:id="@+id/btnClean"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:text="LIMPIAR"
+        android:backgroundTint="#2196F3"
+        android:layout_marginBottom="16dp"
+        />
+
+</LinearLayout>
