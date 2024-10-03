@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00203F"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/deportivo_mandiyu"
+        android:layout_marginTop="54dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingTop="120">
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="INSCRIBIR SOCIO"
+            android:backgroundTint="#2196F3"
+            android:layout_marginBottom="16dp"
+            />
+        <Button
+            android:id="@+id/btnListMembers"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="LISTAR SOCIOS"
+            android:backgroundTint="#2196F3"
+            android:layout_marginBottom="16dp"
+            />
+        <Button
+            android:id="@+id/btnPayCourse"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="REALIZAR PAGO"
+            android:backgroundTint="#2196F3"
+            android:layout_marginBottom="16dp"
+            />
+        <Button
+            android:id="@+id/btnMakeCard"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:text="EMITIR CARNET"
+            android:backgroundTint="#2196F3"
+            android:layout_marginBottom="16dp"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>
