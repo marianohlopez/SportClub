@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00203F"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context=".IssueCardMain">
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/deportivo_mandiyu"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        />
+
+    <TextView
+        android:id="@+id/tvInstructionMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="45dp"
+        android:text="INGRESE Nº DE DOC. DEL SOCIO"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="358dp"
+        android:layout_height="196dp"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/material_on_surface_disabled"
+        app:cardElevation="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteY="280dp">>
+
+        <EditText
+            android:id="@+id/etIdNumber"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="20dp"
+            android:background="#FFFFFF"
+            android:hint="Nº de documento"
+            android:inputType="text"
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textColorHint="#B0B0B0" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="80dp"
+            android:backgroundTint="#2196F3"
+            android:text="INGRESAR"
+            android:textSize="18dp" />
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="180dp"
+        android:textSize="18dp"
+        android:layout_height="wrap_content"
+        android:text="VOLVER"
+        android:backgroundTint="#2196F3"
+        android:layout_marginTop="100dp"
+        />
+
+</LinearLayout>
