@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Payment"
+    android:background="#00203F"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="95dp"
+        android:src="@drawable/deportivo_mandiyu"
+        android:contentDescription="LogoDelClub"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="16dp"
+        tools:ignore="MissingConstraints"/>
+
+    <EditText
+        android:id="@+id/editTextCardNumber"
+        android:layout_width="310dp"
+        android:layout_height="50dp"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:background="#FFFFFF"
+        android:hint="Nº de documento"
+        android:inputType="number"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="139dp"
+        tools:ignore="MissingConstraints"/>
+
+    <EditText
+        android:id="@+id/editTextAmount"
+        android:layout_width="312dp"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:hint="Monto a pagar"
+        android:inputType="numberDecimal"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:textSize="20dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="210dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="218dp"
+        android:layout_height="196dp"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/material_on_surface_disabled"
+        app:cardElevation="4dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="96dp"
+        tools:layout_editor_absoluteY="280dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            tools:ignore="MissingConstraints">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="FORMAS DE PAGO"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:backgroundTint="#00203F"
+                app:buttonTint="#FFFFFF"
+                tools:layout_editor_absoluteX="134dp"
+                tools:layout_editor_absoluteY="352dp" />
+
+            <CheckBox
+                android:id="@+id/checkboxCash"
+                android:layout_width="130dp"
+                android:layout_height="64dp"
+                android:gravity="center"
+                android:text="EFECTIVO"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:backgroundTint="#00203F"
+                app:buttonTint="#FFFFFF"
+                tools:layout_editor_absoluteX="149dp"
+                tools:layout_editor_absoluteY="375dp" />
+
+            <CheckBox
+                android:id="@+id/checkboxCard"
+                android:layout_width="125dp"
+                android:layout_height="58dp"
+                android:gravity="center"
+                android:text="TARJETA"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:backgroundTint="#00203F"
+                app:buttonTint="#FFFFFF"
+                tools:layout_editor_absoluteX="152dp"
+                tools:layout_editor_absoluteY="431dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/buttonSubmitPayment"
+        android:layout_width="253dp"
+        android:layout_height="66dp"
+        android:layout_marginButtom="16dp"
+        android:backgroundTint="#2196F3"
+        android:text="PAGAR"
+        android:textSize="17dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="79dp"
+        tools:layout_editor_absoluteY="493dp" />
+
+    <Button
+        android:id="@+id/buttonSubmitReceipt"
+        android:layout_width="254dp"
+        android:layout_height="62dp"
+        android:layout_marginButtom="25dp"
+        android:backgroundTint="#2196F3"
+        android:text="COMPROBANTE"
+        android:textSize="17dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="78dp"
+        tools:layout_editor_absoluteY="559dp" />
+
+    <Button
+        android:id="@+id/buttonSubmitBack"
+        android:layout_width="256dp"
+        android:layout_height="62dp"
+        android:layout_marginButtom="25dp"
+        android:backgroundTint="#2196F3"
+        android:text="VOLVER"
+        android:textSize="17dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="621dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MemberList"
+    android:background="#00203F"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+
+        <ImageView
+            android:id="@+id/logoClub"
+            android:layout_width="96dp"
+            android:layout_height="95dp"
+            android:src="@drawable/deportivo_mandiyu"
+            android:contentDescription="LogoDelClub"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="16dp"
+            tools:ignore="MissingConstraints"/>
+
+        <TextView
+            android:id="@+id/titleList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="LISTADO DE SOCIOS"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoClub" />
+
+        <!-- Contenedor del listado -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/memberListCard"
+            android:layout_width="375dp"
+            android:layout_height="440dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="20dp"
+            android:background="#D9D9D9"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonSubmitBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleList">
+
+                <!-- Tabla -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="374dp"
+                    android:layout_height="439dp"
+                    android:background="#FFFFFF"
+                    android:padding="16dp">
+
+                        <!-- Encabezados -->
+                        <TextView
+                            android:id="@+id/nameHeader"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/cell_border"
+                            android:gravity="center"
+                            android:text="NOMBRE"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent="0.3" />
+
+                        <TextView
+                            android:id="@+id/lastnameHeader"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/cell_border"
+                            android:gravity="center"
+                            android:text="APELLIDO"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/nameHeader"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent="0.3" />
+
+                        <TextView
+                            android:id="@+id/docHeader"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/cell_border"
+                            android:gravity="center"
+                            android:text="DNI"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/lastnameHeader"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintWidth_percent="0.4" />
+
+                        <!-- Contenedor de datos -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/memberList"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/cell_border"
+                            android:scrollbars="vertical"
+                            android:textColor="#666666"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/nameHeader"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonSubmitBack"
+            android:layout_width="254dp"
+            android:layout_height="58dp"
+            android:layout_marginButtom="25dp"
+            android:backgroundTint="#2196F3"
+            android:text="VOLVER"
+            android:textSize="17dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="78dp"
+            tools:layout_editor_absoluteY="627dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
