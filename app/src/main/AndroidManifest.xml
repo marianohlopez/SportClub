@@ -13,29 +13,26 @@
         android:theme="@style/Theme.SportClub"
         tools:targetApi="31">
         <activity
-            android:name=".IssueCard"
-            android:exported="false" />
-        <activity
-            android:name=".IssueCardMain"
-            android:exported="false" />
-        <activity
             android:name=".Inscription"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MemberListActivity" />
+            android:name=".MemberList"
+            android:exported="false" />
         <activity
-            android:name=".PaymentActivity" />
+            android:name=".Payment"
+            android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
