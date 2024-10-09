@@ -19,6 +19,12 @@
             android:name=".Login"
             android:exported="false" />
         <activity
+            android:name=".MemberList"
+            android:exported="false" />
+        <activity
+            android:name=".Payment"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -26,10 +32,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        <activity
-            android:name=".MemberListActivity" />
-        <activity
-                android:name=".PaymentActivity" />
+            
         </activity>
     </application>
 
