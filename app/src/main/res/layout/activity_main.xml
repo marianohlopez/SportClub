@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:paddingTop="120">
+        android:paddingTop="120dp">
 
         <Button
             android:id="@+id/btnSignUp"
