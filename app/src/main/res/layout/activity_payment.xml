@@ -118,8 +118,8 @@
         android:text="PAGAR"
         android:textSize="17dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="79dp"
-        tools:layout_editor_absoluteY="493dp" />
+        tools:layout_editor_absoluteX="78dp"
+        tools:layout_editor_absoluteY="534dp" />
 
     <Button
         android:id="@+id/buttonSubmitReceipt"
@@ -131,18 +131,7 @@
         android:textSize="17dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="559dp" />
+        tools:layout_editor_absoluteY="616dp" />
 
-    <Button
-        android:id="@+id/buttonSubmitBack"
-        android:layout_width="256dp"
-        android:layout_height="62dp"
-        android:layout_marginButtom="25dp"
-        android:backgroundTint="#2196F3"
-        android:text="VOLVER"
-        android:textSize="17dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="77dp"
-        tools:layout_editor_absoluteY="621dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
