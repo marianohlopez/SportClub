@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -18,8 +18,7 @@
             android:src="@drawable/deportivo_mandiyu"
             android:contentDescription="LogoDelClub"
             tools:layout_editor_absoluteX="157dp"
-            tools:layout_editor_absoluteY="16dp"
-            tools:ignore="MissingConstraints"/>
+            tools:layout_editor_absoluteY="16dp" />
 
         <TextView
             android:id="@+id/titleList"
@@ -29,11 +28,7 @@
             android:text="LISTADO DE SOCIOS"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoClub" />
+            android:textStyle="bold" />
 
         <!-- Contenedor del listado -->
         <androidx.cardview.widget.CardView
@@ -47,9 +42,7 @@
             android:background="#D9D9D9"
             app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleList">
+            >
 
                 <!-- Tabla -->
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -118,4 +111,4 @@
 
         </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
