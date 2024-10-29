@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SportClub</string>
+    <string-array name="document_types">
+        <item>DNI</item>
+        <item>Pasaporte</item>
+        <item>C.I.</item>
+        <item>Otro</item>
+    </string-array>
 </resources>
