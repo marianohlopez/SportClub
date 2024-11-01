@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.database.Cursor
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -30,16 +31,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         // Constantes para la tabla members
 
-        private const val TABLE_MEMBERS = "members"
-        private const val MEMBER_COLUMN_ID = "ID"
+        internal const val TABLE_MEMBERS = "members"
+        internal const val MEMBER_COLUMN_ID = "ID"
         private const val MEMBER_COLUMN_FIRSTNAME = "FirstName"
         private const val MEMBER_COLUMN_LASTNAME = "LastName"
         private const val MEMBER_COLUMN_DOCUMENTTYPE = "DocumentType"
-        private const val MEMBER_COLUMN_DOCUMENT = "Document"
+        internal const val MEMBER_COLUMN_DOCUMENT = "Document"
         private const val MEMBER_COLUMN_INSCRIPTIONDATE = "InscriptionDate"
-        private const val MEMBER_COLUMN_EXPIRATIONDATE = "ExpirationDate"
+        internal const val MEMBER_COLUMN_EXPIRATIONDATE = "ExpirationDate"
         private const val MEMBER_COLUMN_HEALTHCERT = "HealthCert"
-        private const val MEMBER_COLUMN_ISACTIVE = "IsActive"
+        internal const val MEMBER_COLUMN_ISACTIVE = "IsActive"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -116,5 +117,32 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         }
 
         return db.insert(TABLE_MEMBERS, null, values)
+    }
+
+    // Método para obtener los datos de un miembro específico por su ID
+    fun getMember(memberId: Int): Map<String, String>? {
+        val db = this.readableDatabase
+        val cursor: Cursor = db.rawQuery("SELECT * FROM Member WHERE id = ?", arrayOf(memberId.toString()))
+
+        // Verificar si el cursor tiene datos
+        return if (cursor.moveToFirst()) {
+            // Crear un mapa con los datos del cursor
+            val memberData = mapOf(
+                "cardNumber" to cursor.getString(cursor.getColumnIndexOrThrow("cardNumber")),
+                "name" to cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                "surname" to cursor.getString(cursor.getColumnIndexOrThrow("surname")),
+                "docType" to cursor.getString(cursor.getColumnIndexOrThrow("docType")),
+                "docNumber" to cursor.getString(cursor.getColumnIndexOrThrow("docNumber")),
+                "issueDate" to cursor.getLong(cursor.getColumnIndexOrThrow("issueDate")).toString(),
+                "expirationDate" to cursor.getLong(cursor.getColumnIndexOrThrow("expirationDate")).toString()
+            )
+            cursor.close()
+            db.close()
+            memberData
+        } else {
+            cursor.close()
+            db.close()
+            null
+        }
     }
 }

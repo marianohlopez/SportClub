@@ -19,10 +19,18 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val btnSignUp = findViewById<Button>(R.id.btnSignUp)
+        val btnSignUp = findViewById<Button>(R.id.btnSignUp) // Referencia al botón "Inscribir Socio"
+        val btnMakeCard = findViewById<Button>(R.id.btnMakeCard) // Referencia al botón "Emitir Carnet"
 
         btnSignUp.setOnClickListener {
+            // Intent para abrir la actividad Inscription
             val intent = Intent(this, Inscription::class.java)
+            startActivity(intent)
+        }
+
+        btnMakeCard.setOnClickListener {
+            // Intent para abrir la actividad IssueCardMain
+            val intent = Intent(this, IssueCardMain::class.java)
             startActivity(intent)
         }
     }
