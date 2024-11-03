@@ -8,6 +8,17 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.util.Log
+
+data class Member(
+    val id: Int,
+    val firstName: String,
+    val lastName: String,
+    val documentType: String,
+    val document: Int,
+    val inscriptionDate: String,
+    val expirationDate: String
+)
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -117,4 +128,56 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return db.insert(TABLE_MEMBERS, null, values)
     }
+
+    // Método para listar socios
+
+    fun getAllMembers(): ArrayList<Member> {
+        val memberList = ArrayList<Member>()
+        val db = this.readableDatabase
+        val cursor = db.query(
+            TABLE_MEMBERS, // Table name
+            null, // Columns to return (null selects all)
+            null, // Selection criteria (null selects all rows)
+            null, // Selection arguments
+            null, // Group by clause
+            null, // Having clause
+            null // Order by clause
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idIndex = cursor.getColumnIndex(MEMBER_COLUMN_ID)
+                val firstNameIndex = cursor.getColumnIndex(MEMBER_COLUMN_FIRSTNAME)
+                val lastNameIndex = cursor.getColumnIndex(MEMBER_COLUMN_LASTNAME)
+                val documentTypeIndex = cursor.getColumnIndex(MEMBER_COLUMN_DOCUMENTTYPE)
+                val documentIndex = cursor.getColumnIndex(MEMBER_COLUMN_DOCUMENT)
+                val inscriptionDateIndex = cursor.getColumnIndex(MEMBER_COLUMN_INSCRIPTIONDATE)
+                val expirationDateIndex = cursor.getColumnIndex(MEMBER_COLUMN_EXPIRATIONDATE)
+
+                if (idIndex != -1 && firstNameIndex != -1 && lastNameIndex != -1 &&
+                    documentTypeIndex != -1 && documentIndex != -1 && inscriptionDateIndex != -1 &&
+                    expirationDateIndex != -1) {
+                    val member = Member(
+                        cursor.getInt(idIndex),
+                        cursor.getString(firstNameIndex),
+                        cursor.getString(lastNameIndex),
+                        cursor.getString(documentTypeIndex),
+                        cursor.getInt(documentIndex),
+                        cursor.getString(inscriptionDateIndex),
+                        cursor.getString(expirationDateIndex)
+                    )
+                    memberList.add(member)
+                } else {
+                    Log.e("DatabaseError", "Column not found in result set")
+                }
+            } while (cursor.moveToNext())
+        } else {
+            Log.e("DatabaseError", "No results found")
+        }
+
+        cursor.close()
+        db.close()
+        return memberList
+    }
+
 }
