@@ -1,6 +1,8 @@
 package com.example.sportclub
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,5 +26,12 @@ class MemberList : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         memberAdapter = MemberAdapter(memberList)
         recyclerView.adapter = memberAdapter
+
+        // Configurar el botón de logo para volver a MainActivity
+        val logoClub = findViewById<ImageView>(R.id.logoClub)
+        logoClub.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent) // Inicia la actividad
+        }
     }
 }

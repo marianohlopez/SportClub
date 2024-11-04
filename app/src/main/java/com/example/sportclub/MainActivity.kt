@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnSignUp = findViewById<Button>(R.id.btnSignUp)
         val btnListMembers = findViewById<Button>(R.id.btnListMembers)
+        val btnPayCourse = findViewById<Button>(R.id.btnPayCourse)
 
         btnSignUp.setOnClickListener {
             val intent = Intent(this, Inscription::class.java)
@@ -28,6 +29,11 @@ class MainActivity : AppCompatActivity() {
         }
         btnListMembers.setOnClickListener {
             val intent = Intent(this, MemberList::class.java)
+            startActivity(intent)
+        }
+
+        btnPayCourse.setOnClickListener {
+            val intent = Intent(this, Payment::class.java)
             startActivity(intent)
         }
     }

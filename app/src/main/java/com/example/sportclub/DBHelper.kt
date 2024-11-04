@@ -129,6 +129,23 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return db.insert(TABLE_MEMBERS, null, values)
     }
 
+    // Método para activar los socios
+
+
+    fun activateMember(document: Int): Int {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(MEMBER_COLUMN_ISACTIVE, 1)
+        }
+        // Actualizar solo si IsActive es 0 y el documento coincide
+        return db.update(
+            TABLE_MEMBERS,
+            values,
+            "$MEMBER_COLUMN_DOCUMENT = ? AND $MEMBER_COLUMN_ISACTIVE = 0",
+            arrayOf(document.toString())
+        )
+    }
+
     // Método para listar socios
 
     fun getAllMembers(): ArrayList<Member> {
