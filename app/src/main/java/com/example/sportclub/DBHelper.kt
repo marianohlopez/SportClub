@@ -17,7 +17,8 @@ data class Member(
     val documentType: String,
     val document: Int,
     val inscriptionDate: String,
-    val expirationDate: String
+    val expirationDate: String,
+    val isActive: Int
 )
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -152,13 +153,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val memberList = ArrayList<Member>()
         val db = this.readableDatabase
         val cursor = db.query(
-            TABLE_MEMBERS, // Table name
-            null, // Columns to return (null selects all)
-            null, // Selection criteria (null selects all rows)
-            null, // Selection arguments
-            null, // Group by clause
-            null, // Having clause
-            null // Order by clause
+            TABLE_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         )
 
         if (cursor.moveToFirst()) {
@@ -170,10 +171,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 val documentIndex = cursor.getColumnIndex(MEMBER_COLUMN_DOCUMENT)
                 val inscriptionDateIndex = cursor.getColumnIndex(MEMBER_COLUMN_INSCRIPTIONDATE)
                 val expirationDateIndex = cursor.getColumnIndex(MEMBER_COLUMN_EXPIRATIONDATE)
+                val isActiveIndex = cursor.getColumnIndex(MEMBER_COLUMN_ISACTIVE)
 
                 if (idIndex != -1 && firstNameIndex != -1 && lastNameIndex != -1 &&
                     documentTypeIndex != -1 && documentIndex != -1 && inscriptionDateIndex != -1 &&
-                    expirationDateIndex != -1) {
+                    expirationDateIndex != -1 && isActiveIndex != -1) {
                     val member = Member(
                         cursor.getInt(idIndex),
                         cursor.getString(firstNameIndex),
@@ -181,7 +183,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                         cursor.getString(documentTypeIndex),
                         cursor.getInt(documentIndex),
                         cursor.getString(inscriptionDateIndex),
-                        cursor.getString(expirationDateIndex)
+                        cursor.getString(expirationDateIndex),
+                        cursor.getInt(isActiveIndex)
                     )
                     memberList.add(member)
                 } else {

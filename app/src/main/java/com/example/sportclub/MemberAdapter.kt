@@ -1,5 +1,6 @@
 package com.example.sportclub
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 class MemberAdapter(private val memberList: List<Member>) :
     RecyclerView.Adapter<MemberAdapter.MemberViewHolder>() {
 
-    // ViewHolder que contiene las referencias a las vistas de cada item
     class MemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val firstNameTextView: TextView = itemView.findViewById(R.id.nameHeader)
         val lastNameTextView: TextView = itemView.findViewById(R.id.lastnameHeader)
         val documentTextView: TextView = itemView.findViewById(R.id.docHeader)
+        val itemLayout: View = itemView // Referencia al layout principal
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemberViewHolder {
@@ -27,9 +28,17 @@ class MemberAdapter(private val memberList: List<Member>) :
         holder.firstNameTextView.text = member.firstName
         holder.lastNameTextView.text = member.lastName
         holder.documentTextView.text = member.document.toString()
+
+        // Cambia el color de fondo si el miembro está activo
+        if (member.isActive == 0) {
+            holder.itemLayout.setBackgroundColor(Color.YELLOW) // Cambiar color a amarillo
+        } else {
+            holder.itemLayout.setBackgroundColor(Color.WHITE) // Fondo por defecto
+        }
     }
 
     override fun getItemCount(): Int {
         return memberList.size
     }
 }
+

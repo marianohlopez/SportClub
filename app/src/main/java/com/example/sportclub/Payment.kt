@@ -1,22 +1,31 @@
 package com.example.sportclub
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.graphics.pdf.PdfDocument
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class Payment : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper
+    private var paidDNI: Int? = null
+    private var paidAmount: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,50 +43,44 @@ class Payment : AppCompatActivity() {
         val checkboxCash = findViewById<CheckBox>(R.id.checkboxCash)
         val checkboxCard = findViewById<CheckBox>(R.id.checkboxCard)
         val buttonSubmitPayment = findViewById<Button>(R.id.buttonSubmitPayment)
+        val buttonSubmitReceipt = findViewById<Button>(R.id.buttonSubmitReceipt)
         val imageClubPayment = findViewById<ImageView>(R.id.imageClubPayment)
 
         imageClubPayment.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent) // Inicia la actividad
+            startActivity(intent)
         }
 
-        /*// Crear un ArrayAdapter usando el array de strings y un diseño de spinner predeterminado
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.document_types,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinnerOptions.adapter = adapter
-        } */
+        // Limitar la selección de solo un CheckBox
+        checkboxCash.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                checkboxCard.isChecked = false
+            }
+        }
+
+        checkboxCard.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                checkboxCash.isChecked = false
+            }
+        }
 
         buttonSubmitPayment.setOnClickListener {
             val dni = etDNI.text.toString().toIntOrNull()
             val amount = etAmount.text.toString().toIntOrNull()
 
-
-            if (dni == null || amount == null ) {
+            if (dni == null || amount == null) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            checkboxCash.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    checkboxCard.isChecked = false
-                }
-            }
-
-            checkboxCard.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    checkboxCash.isChecked = false
-                }
-            }
-
             Log.d("PaymentActivity", "Paying member: Document: $dni")
 
-            // activa los miembros
+            // Activar miembro en la base de datos
             val result = dbHelper.activateMember(dni)
             if (result != -1) {
+                paidDNI = dni
+                paidAmount = amount
+
                 Toast.makeText(this, "Cuota pagada exitosamente", Toast.LENGTH_SHORT).show()
                 clearFields()
             } else {
@@ -85,13 +88,81 @@ class Payment : AppCompatActivity() {
             }
         }
 
+        // Generar el PDF al hacer clic en el botón de recibo
+        buttonSubmitReceipt.setOnClickListener {
+            if (paidDNI != null && paidAmount != null) {
+                createPDFReceipt(paidDNI!!, paidAmount!!)
+            } else {
+                Toast.makeText(this, "Realiza un pago antes de generar el recibo", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun createPDFReceipt(dni: Int, amount: Int) {
+        val pdfDocument = PdfDocument()
+        val pageInfo = PdfDocument.PageInfo.Builder(300, 600, 1).create()
+        val page = pdfDocument.startPage(pageInfo)
+        val canvas = page.canvas
+
+        val paint = Paint()
+
+        // Encabezado estilizado
+        paint.textSize = 20f
+        paint.color = Color.BLUE
+        paint.isFakeBoldText = true
+        canvas.drawText("Recibo de Pago - SportClub", 50f, 50f, paint)
+
+        // Línea divisoria
+        paint.color = Color.GRAY
+        paint.strokeWidth = 1f
+        canvas.drawLine(50f, 70f, 250f, 70f, paint)
+
+        // Detalles del pago
+        paint.textSize = 16f
+        paint.color = Color.BLACK
+        paint.isFakeBoldText = true
+        canvas.drawText("Detalles del Pago", 50f, 100f, paint)
+        paint.textSize = 14f
+        paint.isFakeBoldText = false
+        canvas.drawText("DNI del Cliente: $dni", 50f, 130f, paint)
+        canvas.drawText("Monto Pagado: $$amount", 50f, 160f, paint)
+
+        // Método de pago
+        val paymentMethod = if (findViewById<CheckBox>(R.id.checkboxCash).isChecked) "Efectivo" else "Tarjeta"
+        canvas.drawText("Método de Pago: $paymentMethod", 50f, 190f, paint)
+
+        // Línea divisoria
+        canvas.drawLine(50f, 210f, 250f, 210f, paint)
+
+        // Añadir el logo
+        val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.deportivo_mandiyu)
+        val resizedLogo = Bitmap.createScaledBitmap(logoBitmap, 100, 100, false)
+        canvas.drawBitmap(resizedLogo, 100f, 220f, null)
+
+        // Mensaje de agradecimiento
+        paint.textSize = 12f
+        paint.color = Color.DKGRAY
+        canvas.drawText("Gracias por su pago. ¡Disfruta de los beneficios del club!", 50f, 350f, paint)
+
+        pdfDocument.finishPage(page)
+
+        // Guardar el PDF en la carpeta de Descargas
+        val filePath = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Recibo_Pago_$dni.pdf")
+        try {
+            pdfDocument.writeTo(FileOutputStream(filePath))
+            Toast.makeText(this, "Recibo guardado en: ${filePath.absolutePath}", Toast.LENGTH_LONG).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error al guardar el recibo", Toast.LENGTH_SHORT).show()
+        } finally {
+            pdfDocument.close()
+        }
     }
 
     private fun clearFields() {
-        findViewById<EditText>(R.id.etName).text.clear()
-        findViewById<EditText>(R.id.etLastName).text.clear()
-        findViewById<EditText>(R.id.etPassword).text.clear()
-        findViewById<CheckBox>(R.id.checkboxHealth).isChecked = false
-        findViewById<Spinner>(R.id.spinnerOptions).setSelection(0)
+        findViewById<EditText>(R.id.editTextCardNumber).text.clear()
+        findViewById<EditText>(R.id.editTextAmount).text.clear()
+        findViewById<CheckBox>(R.id.checkboxCash).isChecked = false
+        findViewById<CheckBox>(R.id.checkboxCard).isChecked = false
     }
 }
