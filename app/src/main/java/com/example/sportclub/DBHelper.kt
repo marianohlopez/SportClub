@@ -97,7 +97,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // Método para agregar un socio
-    fun addMember(firstName: String, lastName: String, documentType: String, document: Int): Long {
+    fun addMember(firstName: String, lastName: String, documentType: String, document: Int, isActive: Int = 1): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put(MEMBER_COLUMN_FIRSTNAME, firstName)
@@ -114,27 +114,29 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             calendar.add(Calendar.DAY_OF_YEAR, 30)
             val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
             put(MEMBER_COLUMN_EXPIRATIONDATE, expirationDate)
+
+            put(MEMBER_COLUMN_ISACTIVE, isActive)
         }
 
         return db.insert(TABLE_MEMBERS, null, values)
     }
 
-    // Método para obtener los datos de un miembro específico por su ID
-    fun getMember(memberId: Int): Map<String, String>? {
+    // Método para obtener los datos de un miembro específico por su DOCUMENTO
+    fun getMember(memberDocument: Int): Map<String, String>? {
         val db = this.readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM Member WHERE id = ?", arrayOf(memberId.toString()))
+        val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_MEMBERS WHERE $MEMBER_COLUMN_DOCUMENT = ?", arrayOf(memberDocument.toString()))
 
         // Verificar si el cursor tiene datos
         return if (cursor.moveToFirst()) {
             // Crear un mapa con los datos del cursor
             val memberData = mapOf(
-                "cardNumber" to cursor.getString(cursor.getColumnIndexOrThrow("cardNumber")),
-                "name" to cursor.getString(cursor.getColumnIndexOrThrow("name")),
-                "surname" to cursor.getString(cursor.getColumnIndexOrThrow("surname")),
-                "docType" to cursor.getString(cursor.getColumnIndexOrThrow("docType")),
-                "docNumber" to cursor.getString(cursor.getColumnIndexOrThrow("docNumber")),
-                "issueDate" to cursor.getLong(cursor.getColumnIndexOrThrow("issueDate")).toString(),
-                "expirationDate" to cursor.getLong(cursor.getColumnIndexOrThrow("expirationDate")).toString()
+                "memberId" to cursor.getInt(cursor.getColumnIndexOrThrow("ID")).toString(),
+                "name" to cursor.getString(cursor.getColumnIndexOrThrow("FirstName")),
+                "surname" to cursor.getString(cursor.getColumnIndexOrThrow("LastName")),
+                "docType" to cursor.getString(cursor.getColumnIndexOrThrow("DocumentType")),
+                "docNumber" to cursor.getString(cursor.getColumnIndexOrThrow("Document")),
+                "issueDate" to cursor.getLong(cursor.getColumnIndexOrThrow("InscriptionDate")).toString(),
+                "expirationDate" to cursor.getLong(cursor.getColumnIndexOrThrow("ExpirationDate")).toString()
             )
             cursor.close()
             db.close()

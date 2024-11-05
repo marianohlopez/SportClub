@@ -64,12 +64,12 @@ class IssueCardMain : AppCompatActivity() {
     private fun checkMemberStatus(documentNumber: Int) {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT ${DBHelper.MEMBER_COLUMN_ID}, ${DBHelper.MEMBER_COLUMN_ISACTIVE}, ${DBHelper.MEMBER_COLUMN_EXPIRATIONDATE} FROM ${DBHelper.TABLE_MEMBERS} WHERE ${DBHelper.MEMBER_COLUMN_DOCUMENT} = ?",
+            "SELECT ${DBHelper.MEMBER_COLUMN_ID},${DBHelper.MEMBER_COLUMN_DOCUMENT}, ${DBHelper.MEMBER_COLUMN_ISACTIVE}, ${DBHelper.MEMBER_COLUMN_EXPIRATIONDATE} FROM ${DBHelper.TABLE_MEMBERS} WHERE ${DBHelper.MEMBER_COLUMN_DOCUMENT} = ?",
             arrayOf(documentNumber.toString())
         )
 
         if (cursor.moveToFirst()) {
-            val memberId = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.MEMBER_COLUMN_ID))
+            val memberDocument = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.MEMBER_COLUMN_DOCUMENT))
             val isActive = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.MEMBER_COLUMN_ISACTIVE)) == 1
             val expirationDate = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MEMBER_COLUMN_EXPIRATIONDATE))
 
@@ -80,7 +80,7 @@ class IssueCardMain : AppCompatActivity() {
                 showAlert("El socio debe estar al día con el pago.")
             } else {
                 // Si el socio está activo y al día, procede al siguiente Activity
-                goToIssueCardActivity(memberId)
+                goToIssueCardActivity(memberDocument)
             }
         } else {
             showAlert("No se encontró un socio con el número de documento ingresado.")
@@ -103,9 +103,9 @@ class IssueCardMain : AppCompatActivity() {
         val today = Date()
         return sdf.parse(expirationDate)?.before(today) == true
     }
-    private fun goToIssueCardActivity(memberId: Int) {
+    private fun goToIssueCardActivity(memberDocument: Int) {
         val intent = Intent(this, IssueCard::class.java).apply {
-            putExtra("MEMBER_ID", memberId)
+            putExtra("MEMBER_ID", memberDocument)
         }
         startActivity(intent)
     }
