@@ -105,7 +105,7 @@ class IssueCardMain : AppCompatActivity() {
     }
     private fun goToIssueCardActivity(memberDocument: Int) {
         val intent = Intent(this, IssueCard::class.java).apply {
-            putExtra("MEMBER_ID", memberDocument)
+            putExtra("MEMBER_DOCUMENT", memberDocument)
         }
         startActivity(intent)
     }

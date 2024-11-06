@@ -3,6 +3,8 @@ package com.example.sportclub
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -77,30 +79,26 @@ class IssueCard : AppCompatActivity() {
         val memberData = DBHelper(this).getMember(memberDocument)
 
         if (memberData != null) {
-            tvCardNumber.text = "Nº DE SOCIO: ${memberData["ID"]}"
-            tvName.text = "NOMBRE: ${memberData["FirstName"]}"
-            tvSurname.text = "APELLIDO: ${memberData["LastName"]}"
-            tvDocType.text = "TIPO DE DOC: ${memberData["DocumentType"]}"
-            tvDocNumber.text = "N° DE DOC: ${memberData["Document"]}"
+            tvCardNumber.text = "Nº DE SOCIO: ${memberData["ID"] ?: "No disponible"}"
+            tvName.text = "NOMBRE: ${memberData["FirstName"] ?: "No disponible"}"
+            tvSurname.text = "APELLIDO: ${memberData["LastName"] ?: "No disponible"}"
+            tvDocType.text = "TIPO DE DOC: ${memberData["DocumentType"] ?: "No disponible"}"
+            tvDocNumber.text = "N° DE DOC: ${memberData["Document"] ?: "No disponible"}"
 
-            memberData["InscriptionDate"]?.toLong()?.let {
-                val inscriptionDate = SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
-                ).format(Date(memberData["InscriptionDate"]!!.toLong()))
-                tvIssueDate.text = "FECHA DE EMISIÓN: $inscriptionDate"
-            } ?: run {
-                tvIssueDate.text = "FECHA DE EMISIÓN: N/A"
+            val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+            val inscriptionDateStr = memberData["InscriptionDate"]
+            tvIssueDate.text = if (inscriptionDateStr != null) {
+                "FECHA DE EMISIÓN: ${format.format(format.parse(inscriptionDateStr))}"
+            } else {
+                "FECHA DE EMISIÓN: N/A"
             }
 
-            memberData["ExpirationDate"]?.toLong()?.let {
-                val expirationDate = SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
-                ).format(Date(memberData["ExpirationDate"]!!.toLong()))
-                tvExpirationDate.text = "VENCIMIENTO: $expirationDate"
-            } ?: run {
-                tvExpirationDate.text = "VENCIMIENTO: N/A"
+            val expirationDateStr = memberData["ExpirationDate"]
+            tvExpirationDate.text = if (expirationDateStr != null) {
+                "FECHA DE VENCIMIENTO: ${format.format(format.parse(expirationDateStr))}"
+            } else {
+                "FECHA DE VENCIMIENTO: N/A"
             }
         } else {
             tvCardNumber.text = "Error: Socio no encontrado"
@@ -114,17 +112,37 @@ class IssueCard : AppCompatActivity() {
         if (memberData != null) {
             // Crear un documento PDF
             val pdfDocument = PdfDocument()
-            val paint = Paint()
             val pageInfo = PdfDocument.PageInfo.Builder(300, 600, 1).create()
             val page = pdfDocument.startPage(pageInfo)
             val canvas: Canvas = page.canvas
 
-            // Configuración de estilo para el texto
-            paint.color = Color.BLACK
-            paint.textSize = 12f
+            val paint = Paint()
+            paint.textAlign = Paint.Align.CENTER
 
-            // Agregar el contenido del PDF
-            var yPosition = 20
+            // Fondo oscuro
+            canvas.drawColor(Color.parseColor("#00203F"))
+
+            // Logo
+            val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.deportivo_mandiyu)
+            val logoScaled = Bitmap.createScaledBitmap(logoBitmap, 80, 80, false)
+            canvas.drawBitmap(logoScaled, pageInfo.pageWidth / 2f - logoScaled.width / 2f, 30f, null)
+
+            // Texto "CARNET DE SOCIO" centrado debajo del logo
+            paint.color = Color.WHITE
+            paint.textSize = 18f
+            canvas.drawText("CARNET DE SOCIO", pageInfo.pageWidth / 2f, 130f, paint)
+
+            // Foto de perfil (imagen de marcador de lugar)
+            val placeholderBitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder)
+            val photoScaled = Bitmap.createScaledBitmap(placeholderBitmap, 60, 60, false)
+            canvas.drawBitmap(photoScaled, pageInfo.pageWidth / 2f - photoScaled.width / 2f, 150f, null)
+
+            // Datos del socio
+            paint.textSize = 12f
+            paint.textAlign = Paint.Align.LEFT
+
+            // Información del socio
+            var yPosition = 250
             canvas.drawText("Nº DE SOCIO: ${memberData["ID"]}", 10f, yPosition.toFloat(), paint)
             yPosition += 20
             canvas.drawText("NOMBRE: ${memberData["FirstName"]}", 10f, yPosition.toFloat(), paint)
@@ -137,21 +155,37 @@ class IssueCard : AppCompatActivity() {
             yPosition += 20
 
             // Convertir fechas de emisión y vencimiento
-            val inscriptionDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(memberData["InscriptionDate"]!!.toLong()))
-            val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(memberData["ExpirationDate"]!!.toLong()))
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val inscriptionDateString = memberData["InscriptionDate"]
+            val expirationDateString = memberData["ExpirationDate"]
 
-            canvas.drawText("FECHA DE EMISIÓN: $inscriptionDate", 10f, yPosition.toFloat(), paint)
+// Analizar las fechas a partir de sus cadenas y formatearlas en el mismo formato
+            val inscriptionDate = if (inscriptionDateString != null) {
+                dateFormat.format(dateFormat.parse(inscriptionDateString))
+            } else {
+                "Fecha no disponible"
+            }
+
+            val expirationDate = if (expirationDateString != null) {
+                dateFormat.format(dateFormat.parse(expirationDateString))
+            } else {
+                "Fecha no disponible"
+            }
+
+// Escribir las fechas en el PDF
+            yPosition += 80
+            canvas.drawText("FECHA DE EMISIÓN: $inscriptionDate", 50f, yPosition.toFloat(), paint)
             yPosition += 20
-            canvas.drawText("VENCIMIENTO: $expirationDate", 10f, yPosition.toFloat(), paint)
+            canvas.drawText("VENCIMIENTO: $expirationDate", 50f, yPosition.toFloat(), paint)
 
             // Terminar la página y el documento
             pdfDocument.finishPage(page)
 
             // Guardar el archivo PDF en el almacenamiento externo
-            val filePath = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Socio_$tvCardNumber.pdf")
+            val filePath = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "Socio_$memberDocument.pdf")
             try {
                 pdfDocument.writeTo(FileOutputStream(filePath))
-                Toast.makeText(this, "PDF guardado en ${filePath.path}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "PDF guardado en ${filePath.absolutePath}", Toast.LENGTH_LONG).show()
             } catch (e: IOException) {
                 e.printStackTrace()
                 Toast.makeText(this, "Error al guardar el PDF: ${e.message}", Toast.LENGTH_LONG).show()

@@ -9,6 +9,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import android.database.Cursor
+import android.util.Log
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -130,13 +131,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return if (cursor.moveToFirst()) {
             // Crear un mapa con los datos del cursor
             val memberData = mapOf(
-                "memberId" to cursor.getInt(cursor.getColumnIndexOrThrow("ID")).toString(),
-                "name" to cursor.getString(cursor.getColumnIndexOrThrow("FirstName")),
-                "surname" to cursor.getString(cursor.getColumnIndexOrThrow("LastName")),
-                "docType" to cursor.getString(cursor.getColumnIndexOrThrow("DocumentType")),
-                "docNumber" to cursor.getString(cursor.getColumnIndexOrThrow("Document")),
-                "issueDate" to cursor.getLong(cursor.getColumnIndexOrThrow("InscriptionDate")).toString(),
-                "expirationDate" to cursor.getLong(cursor.getColumnIndexOrThrow("ExpirationDate")).toString()
+                "ID" to cursor.getInt(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_ID)).toString(),
+                "FirstName" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_FIRSTNAME)),
+                "LastName" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_LASTNAME)),
+                "DocumentType" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_DOCUMENTTYPE)),
+                "Document" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_DOCUMENT)),
+                "InscriptionDate" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_INSCRIPTIONDATE)),
+                "ExpirationDate" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_EXPIRATIONDATE))
             )
             cursor.close()
             db.close()
