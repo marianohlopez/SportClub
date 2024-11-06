@@ -19,6 +19,12 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".IssueCardMain"
+            android:exported="false" />
+        <activity
+            android:name=".IssueCard"
+            android:exported="true" />
+        <activity
             android:name=".MemberList"
             android:exported="false" />
         <activity

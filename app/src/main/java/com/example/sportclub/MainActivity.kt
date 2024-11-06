@@ -20,10 +20,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         val btnSignUp = findViewById<Button>(R.id.btnSignUp)
+        val btnMakeCard = findViewById<Button>(R.id.btnMakeCard)
         val btnListMembers = findViewById<Button>(R.id.btnListMembers)
         val btnPayCourse = findViewById<Button>(R.id.btnPayCourse)
 
         btnSignUp.setOnClickListener {
+            // Intent para abrir la actividad Inscription
             val intent = Intent(this, Inscription::class.java)
             startActivity(intent)
         }
@@ -34,6 +36,12 @@ class MainActivity : AppCompatActivity() {
 
         btnPayCourse.setOnClickListener {
             val intent = Intent(this, Payment::class.java)
+            startActivity(intent)
+        }
+
+        btnMakeCard.setOnClickListener {
+            // Intent para abrir la actividad IssueCardMain
+            val intent = Intent(this, IssueCardMain::class.java)
             startActivity(intent)
         }
     }

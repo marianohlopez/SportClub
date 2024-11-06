@@ -11,6 +11,7 @@
     tools:context=".IssueCardMain">
 
     <ImageView
+        android:id="@+id/imageClubISM"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:src="@drawable/deportivo_mandiyu"
@@ -39,7 +40,7 @@
         app:cardUseCompatPadding="true"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="96dp"
-        tools:layout_editor_absoluteY="280dp">>
+        tools:layout_editor_absoluteY="280dp">
 
         <EditText
             android:id="@+id/etIdNumber"

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.database.Cursor
 import android.util.Log
 
 data class Member(
@@ -200,4 +201,31 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return memberList
     }
 
+
+    // Método para obtener los datos de un miembro específico por su DOCUMENTO
+    fun getMember(memberDocument: Int): Map<String, String>? {
+        val db = this.readableDatabase
+        val cursor: Cursor = db.rawQuery("SELECT * FROM $TABLE_MEMBERS WHERE $MEMBER_COLUMN_DOCUMENT = ?", arrayOf(memberDocument.toString()))
+
+        // Verificar si el cursor tiene datos
+        return if (cursor.moveToFirst()) {
+            // Crear un mapa con los datos del cursor
+            val memberData = mapOf(
+                "memberId" to cursor.getInt(cursor.getColumnIndexOrThrow("ID")).toString(),
+                "name" to cursor.getString(cursor.getColumnIndexOrThrow("FirstName")),
+                "surname" to cursor.getString(cursor.getColumnIndexOrThrow("LastName")),
+                "docType" to cursor.getString(cursor.getColumnIndexOrThrow("DocumentType")),
+                "docNumber" to cursor.getString(cursor.getColumnIndexOrThrow("Document")),
+                "issueDate" to cursor.getLong(cursor.getColumnIndexOrThrow("InscriptionDate")).toString(),
+                "expirationDate" to cursor.getLong(cursor.getColumnIndexOrThrow("ExpirationDate")).toString()
+            )
+            cursor.close()
+            db.close()
+            memberData
+        } else {
+            cursor.close()
+            db.close()
+            null
+        }
+    }
 }
