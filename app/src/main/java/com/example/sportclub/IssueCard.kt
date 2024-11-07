@@ -72,6 +72,12 @@ class IssueCard : AppCompatActivity() {
             // Lógica para descargar el PDF
             downloadPDF(memberDocument)
         }
+
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent) // Inicia la actividad
+        }
     }
     @SuppressLint("SetTextI18n") //Esto me sugirio el android studio
     private fun loadMemberData(memberDocument: Int) {
