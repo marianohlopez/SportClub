@@ -36,7 +36,7 @@ class IssueCard : AppCompatActivity() {
     private lateinit var tvIssueDate: TextView
     private lateinit var tvExpirationDate: TextView
 
-    @SuppressLint("SetTextI18n") //Esto me sugirio el android studio
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,7 +46,7 @@ class IssueCard : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // Referencia de vistas
+
         tvCardNumber = findViewById(R.id.tvCardNumber)
         tvName = findViewById(R.id.tvName)
         tvSurname = findViewById(R.id.tvSurname)
@@ -55,146 +55,121 @@ class IssueCard : AppCompatActivity() {
         tvIssueDate = findViewById(R.id.tvIssueDate)
         tvExpirationDate = findViewById(R.id.tvExpirationDate)
 
-        val memberDocument = intent.getIntExtra("MEMBER_DOCUMENT", -1)
+        val imageClub = findViewById<ImageView>(R.id.imageClubIC)
 
-        Log.d("IssueCard", "Received MEMBER_DOCUMENT in IssueCard: $memberDocument")
+        imageClub.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        val memberDocument = intent.getIntExtra("MEMBER_DOCUMENT", -1)
 
         if (memberDocument != -1) {
             loadMemberData(memberDocument)
         } else {
-            // Maneja el caso en que no se pase un memberDocument válido
             tvCardNumber.text = "Error: Documento de socio no encontrado"
         }
 
-        // Botón de descarga de PDF
         val btnDownloadPDF = findViewById<Button>(R.id.btnDownloadPDF)
         btnDownloadPDF.setOnClickListener {
-            // Lógica para descargar el PDF
             downloadPDF(memberDocument)
         }
     }
-    @SuppressLint("SetTextI18n") //Esto me sugirio el android studio
+
+    @SuppressLint("SetTextI18n")
     private fun loadMemberData(memberDocument: Int) {
-        // Ejemplo: cargar datos de DBHelper y asignar a los TextViews
         val memberData = DBHelper(this).getMember(memberDocument)
 
         if (memberData != null) {
-            tvCardNumber.text = "Nº DE SOCIO: ${memberData["ID"] ?: "No disponible"}"
-            tvName.text = "NOMBRE: ${memberData["FirstName"] ?: "No disponible"}"
-            tvSurname.text = "APELLIDO: ${memberData["LastName"] ?: "No disponible"}"
-            tvDocType.text = "TIPO DE DOC: ${memberData["DocumentType"] ?: "No disponible"}"
-            tvDocNumber.text = "N° DE DOC: ${memberData["Document"] ?: "No disponible"}"
-
-            val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-            val inscriptionDateStr = memberData["InscriptionDate"]
-            tvIssueDate.text = if (inscriptionDateStr != null) {
-                "FECHA DE EMISIÓN: ${format.format(format.parse(inscriptionDateStr))}"
-            } else {
-                "FECHA DE EMISIÓN: N/A"
-            }
-
-            val expirationDateStr = memberData["ExpirationDate"]
-            tvExpirationDate.text = if (expirationDateStr != null) {
-                "FECHA DE VENCIMIENTO: ${format.format(format.parse(expirationDateStr))}"
-            } else {
-                "FECHA DE VENCIMIENTO: N/A"
-            }
+            tvCardNumber.text = "Nº DE SOCIO: ${memberData["memberId"]}"
+            tvName.text = "NOMBRE: ${memberData["name"]}"
+            tvSurname.text = "APELLIDO: ${memberData["surname"]}"
+            tvDocType.text = "TIPO DE DOC: ${memberData["docType"]}"
+            tvDocNumber.text = "N° DE DOC: ${memberData["docNumber"]}"
+            tvIssueDate.text = "FECHA DE EMISIÓN: ${memberData["issueDate"]}"
+            tvExpirationDate.text = "VENCIMIENTO: ${memberData["expirationDate"]}"
         } else {
             tvCardNumber.text = "Error: Socio no encontrado"
         }
     }
 
     private fun downloadPDF(memberDocument: Int) {
-        // Implementar la lógica para generar y descargar el PDF con los datos del socio
         val memberData = DBHelper(this).getMember(memberDocument)
 
         if (memberData != null) {
-            // Crear un documento PDF
             val pdfDocument = PdfDocument()
             val pageInfo = PdfDocument.PageInfo.Builder(300, 600, 1).create()
             val page = pdfDocument.startPage(pageInfo)
-            val canvas: Canvas = page.canvas
-
+            val canvas = page.canvas
             val paint = Paint()
-            paint.textAlign = Paint.Align.CENTER
 
-            // Fondo oscuro
-            canvas.drawColor(Color.parseColor("#00203F"))
+            // Encabezado estilizado
+            paint.textSize = 20f
+            paint.color = Color.BLUE
+            paint.isFakeBoldText = true
+            canvas.drawText("Ficha de Socio - SportClub", 50f, 50f, paint)
 
-            // Logo
+            // Línea divisoria
+            paint.color = Color.GRAY
+            paint.strokeWidth = 1f
+            canvas.drawLine(50f, 70f, 250f, 70f, paint)
+
+            // Detalles del socio
+            paint.textSize = 16f
+            paint.color = Color.BLACK
+            paint.isFakeBoldText = true
+            canvas.drawText("Detalles del Socio", 50f, 100f, paint)
+            paint.textSize = 14f
+            paint.isFakeBoldText = false
+
+            var yPosition = 130f
+            canvas.drawText("Nº DE SOCIO: ${memberData["memberId"]}", 50f, yPosition, paint)
+            yPosition += 30
+            canvas.drawText("NOMBRE: ${memberData["name"]}", 50f, yPosition, paint)
+            yPosition += 30
+            canvas.drawText("APELLIDO: ${memberData["surname"]}", 50f, yPosition, paint)
+            yPosition += 30
+            canvas.drawText("TIPO DE DOC: ${memberData["docType"]}", 50f, yPosition, paint)
+            yPosition += 30
+            canvas.drawText("N° DE DOC: ${memberData["docNumber"]}", 50f, yPosition, paint)
+            yPosition += 30
+            canvas.drawText("FECHA DE EMISIÓN: ${memberData["issueDate"]}", 50f, yPosition, paint)
+            yPosition += 30
+            canvas.drawText("VENCIMIENTO: ${memberData["expirationDate"]}", 50f, yPosition, paint)
+
+            // Línea divisoria
+            yPosition += 20
+            paint.color = Color.GRAY
+            paint.strokeWidth = 1f
+            canvas.drawLine(50f, yPosition, 250f, yPosition, paint)
+
+            // Añadir el logo
             val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.deportivo_mandiyu)
-            val logoScaled = Bitmap.createScaledBitmap(logoBitmap, 80, 80, false)
-            canvas.drawBitmap(logoScaled, pageInfo.pageWidth / 2f - logoScaled.width / 2f, 30f, null)
+            val resizedLogo = Bitmap.createScaledBitmap(logoBitmap, 100, 100, false)
+            canvas.drawBitmap(resizedLogo, 100f, yPosition + 30f, null)
 
-            // Texto "CARNET DE SOCIO" centrado debajo del logo
-            paint.color = Color.WHITE
-            paint.textSize = 18f
-            canvas.drawText("CARNET DE SOCIO", pageInfo.pageWidth / 2f, 130f, paint)
-
-            // Foto de perfil (imagen de marcador de lugar)
-            val placeholderBitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder)
-            val photoScaled = Bitmap.createScaledBitmap(placeholderBitmap, 60, 60, false)
-            canvas.drawBitmap(photoScaled, pageInfo.pageWidth / 2f - photoScaled.width / 2f, 150f, null)
-
-            // Datos del socio
+            // Mensaje de agradecimiento
+            yPosition += 150
             paint.textSize = 12f
-            paint.textAlign = Paint.Align.LEFT
+            paint.color = Color.DKGRAY
+            canvas.drawText("Gracias por ser parte de nuestro club.", 50f, yPosition, paint)
 
-            // Información del socio
-            var yPosition = 250
-            canvas.drawText("Nº DE SOCIO: ${memberData["ID"]}", 10f, yPosition.toFloat(), paint)
-            yPosition += 20
-            canvas.drawText("NOMBRE: ${memberData["FirstName"]}", 10f, yPosition.toFloat(), paint)
-            yPosition += 20
-            canvas.drawText("APELLIDO: ${memberData["LastName"]}", 10f, yPosition.toFloat(), paint)
-            yPosition += 20
-            canvas.drawText("TIPO DE DOC: ${memberData["DocumentType"]}", 10f, yPosition.toFloat(), paint)
-            yPosition += 20
-            canvas.drawText("N° DE DOC: ${memberData["Document"]}", 10f, yPosition.toFloat(), paint)
-            yPosition += 20
-
-            // Convertir fechas de emisión y vencimiento
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val inscriptionDateString = memberData["InscriptionDate"]
-            val expirationDateString = memberData["ExpirationDate"]
-
-// Analizar las fechas a partir de sus cadenas y formatearlas en el mismo formato
-            val inscriptionDate = if (inscriptionDateString != null) {
-                dateFormat.format(dateFormat.parse(inscriptionDateString))
-            } else {
-                "Fecha no disponible"
-            }
-
-            val expirationDate = if (expirationDateString != null) {
-                dateFormat.format(dateFormat.parse(expirationDateString))
-            } else {
-                "Fecha no disponible"
-            }
-
-// Escribir las fechas en el PDF
-            yPosition += 80
-            canvas.drawText("FECHA DE EMISIÓN: $inscriptionDate", 50f, yPosition.toFloat(), paint)
-            yPosition += 20
-            canvas.drawText("VENCIMIENTO: $expirationDate", 50f, yPosition.toFloat(), paint)
-
-            // Terminar la página y el documento
             pdfDocument.finishPage(page)
 
-            // Guardar el archivo PDF en el almacenamiento externo
-            val filePath = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "Socio_$memberDocument.pdf")
+            // Guardar el PDF en la carpeta de Descargas
+            val filePath = File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Ficha_Socio_${memberData["memberId"]}.pdf")
             try {
                 pdfDocument.writeTo(FileOutputStream(filePath))
-                Toast.makeText(this, "PDF guardado en ${filePath.absolutePath}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Ficha guardada en: ${filePath.absolutePath}", Toast.LENGTH_LONG).show()
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(this, "Error al guardar el PDF: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error al guardar la ficha", Toast.LENGTH_SHORT).show()
+            } finally {
+                pdfDocument.close()
             }
-
-            // Cerrar el documento PDF
-            pdfDocument.close()
         } else {
-            Toast.makeText(this, "Error: Socio no encontrado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No se encontraron datos para generar la ficha", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

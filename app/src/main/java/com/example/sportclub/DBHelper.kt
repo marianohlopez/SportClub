@@ -11,6 +11,17 @@ import java.util.Locale
 import android.database.Cursor
 import android.util.Log
 
+data class Member(
+    val id: Int,
+    val firstName: String,
+    val lastName: String,
+    val documentType: String,
+    val document: Int,
+    val inscriptionDate: String,
+    val expirationDate: String,
+    val isActive: Int
+)
+
 class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
 
@@ -32,16 +43,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         // Constantes para la tabla members
 
-        internal const val TABLE_MEMBERS = "members"
-        internal const val MEMBER_COLUMN_ID = "ID"
+        const val TABLE_MEMBERS = "members"
+        const val MEMBER_COLUMN_ID = "ID"
         private const val MEMBER_COLUMN_FIRSTNAME = "FirstName"
         private const val MEMBER_COLUMN_LASTNAME = "LastName"
         private const val MEMBER_COLUMN_DOCUMENTTYPE = "DocumentType"
-        internal const val MEMBER_COLUMN_DOCUMENT = "Document"
+        const val MEMBER_COLUMN_DOCUMENT = "Document"
         private const val MEMBER_COLUMN_INSCRIPTIONDATE = "InscriptionDate"
-        internal const val MEMBER_COLUMN_EXPIRATIONDATE = "ExpirationDate"
+        const val MEMBER_COLUMN_EXPIRATIONDATE = "ExpirationDate"
         private const val MEMBER_COLUMN_HEALTHCERT = "HealthCert"
-        internal const val MEMBER_COLUMN_ISACTIVE = "IsActive"
+        const val MEMBER_COLUMN_ISACTIVE = "IsActive"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -98,7 +109,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // Método para agregar un socio
-    fun addMember(firstName: String, lastName: String, documentType: String, document: Int, isActive: Int = 1): Long {
+    fun addMember(firstName: String, lastName: String, documentType: String, document: Int): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put(MEMBER_COLUMN_FIRSTNAME, firstName)
@@ -115,12 +126,81 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
             calendar.add(Calendar.DAY_OF_YEAR, 30)
             val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
             put(MEMBER_COLUMN_EXPIRATIONDATE, expirationDate)
-
-            put(MEMBER_COLUMN_ISACTIVE, isActive)
         }
 
         return db.insert(TABLE_MEMBERS, null, values)
     }
+
+    // Método para activar los socios
+
+
+    fun activateMember(document: Int): Int {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(MEMBER_COLUMN_ISACTIVE, 1)
+        }
+        // Actualizar solo si IsActive es 0 y el documento coincide
+        return db.update(
+            TABLE_MEMBERS,
+            values,
+            "$MEMBER_COLUMN_DOCUMENT = ? AND $MEMBER_COLUMN_ISACTIVE = 0",
+            arrayOf(document.toString())
+        )
+    }
+
+    // Método para listar socios
+
+    fun getAllMembers(): ArrayList<Member> {
+        val memberList = ArrayList<Member>()
+        val db = this.readableDatabase
+        val cursor = db.query(
+            TABLE_MEMBERS,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val idIndex = cursor.getColumnIndex(MEMBER_COLUMN_ID)
+                val firstNameIndex = cursor.getColumnIndex(MEMBER_COLUMN_FIRSTNAME)
+                val lastNameIndex = cursor.getColumnIndex(MEMBER_COLUMN_LASTNAME)
+                val documentTypeIndex = cursor.getColumnIndex(MEMBER_COLUMN_DOCUMENTTYPE)
+                val documentIndex = cursor.getColumnIndex(MEMBER_COLUMN_DOCUMENT)
+                val inscriptionDateIndex = cursor.getColumnIndex(MEMBER_COLUMN_INSCRIPTIONDATE)
+                val expirationDateIndex = cursor.getColumnIndex(MEMBER_COLUMN_EXPIRATIONDATE)
+                val isActiveIndex = cursor.getColumnIndex(MEMBER_COLUMN_ISACTIVE)
+
+                if (idIndex != -1 && firstNameIndex != -1 && lastNameIndex != -1 &&
+                    documentTypeIndex != -1 && documentIndex != -1 && inscriptionDateIndex != -1 &&
+                    expirationDateIndex != -1 && isActiveIndex != -1) {
+                    val member = Member(
+                        cursor.getInt(idIndex),
+                        cursor.getString(firstNameIndex),
+                        cursor.getString(lastNameIndex),
+                        cursor.getString(documentTypeIndex),
+                        cursor.getInt(documentIndex),
+                        cursor.getString(inscriptionDateIndex),
+                        cursor.getString(expirationDateIndex),
+                        cursor.getInt(isActiveIndex)
+                    )
+                    memberList.add(member)
+                } else {
+                    Log.e("DatabaseError", "Column not found in result set")
+                }
+            } while (cursor.moveToNext())
+        } else {
+            Log.e("DatabaseError", "No results found")
+        }
+
+        cursor.close()
+        db.close()
+        return memberList
+    }
+
 
     // Método para obtener los datos de un miembro específico por su DOCUMENTO
     fun getMember(memberDocument: Int): Map<String, String>? {
@@ -131,13 +211,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return if (cursor.moveToFirst()) {
             // Crear un mapa con los datos del cursor
             val memberData = mapOf(
-                "ID" to cursor.getInt(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_ID)).toString(),
-                "FirstName" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_FIRSTNAME)),
-                "LastName" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_LASTNAME)),
-                "DocumentType" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_DOCUMENTTYPE)),
-                "Document" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_DOCUMENT)),
-                "InscriptionDate" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_INSCRIPTIONDATE)),
-                "ExpirationDate" to cursor.getString(cursor.getColumnIndexOrThrow(MEMBER_COLUMN_EXPIRATIONDATE))
+                "memberId" to cursor.getInt(cursor.getColumnIndexOrThrow("ID")).toString(),
+                "name" to cursor.getString(cursor.getColumnIndexOrThrow("FirstName")),
+                "surname" to cursor.getString(cursor.getColumnIndexOrThrow("LastName")),
+                "docType" to cursor.getString(cursor.getColumnIndexOrThrow("DocumentType")),
+                "docNumber" to cursor.getString(cursor.getColumnIndexOrThrow("Document")),
+                "issueDate" to cursor.getLong(cursor.getColumnIndexOrThrow("InscriptionDate")).toString(),
+                "expirationDate" to cursor.getLong(cursor.getColumnIndexOrThrow("ExpirationDate")).toString()
             )
             cursor.close()
             db.close()
