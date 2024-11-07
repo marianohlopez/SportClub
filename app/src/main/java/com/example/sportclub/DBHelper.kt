@@ -43,16 +43,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         // Constantes para la tabla members
 
-        private const val TABLE_MEMBERS = "members"
-        private const val MEMBER_COLUMN_ID = "ID"
+        const val TABLE_MEMBERS = "members"
+        const val MEMBER_COLUMN_ID = "ID"
         private const val MEMBER_COLUMN_FIRSTNAME = "FirstName"
         private const val MEMBER_COLUMN_LASTNAME = "LastName"
         private const val MEMBER_COLUMN_DOCUMENTTYPE = "DocumentType"
-        private const val MEMBER_COLUMN_DOCUMENT = "Document"
+        const val MEMBER_COLUMN_DOCUMENT = "Document"
         private const val MEMBER_COLUMN_INSCRIPTIONDATE = "InscriptionDate"
-        private const val MEMBER_COLUMN_EXPIRATIONDATE = "ExpirationDate"
+        const val MEMBER_COLUMN_EXPIRATIONDATE = "ExpirationDate"
         private const val MEMBER_COLUMN_HEALTHCERT = "HealthCert"
-        private const val MEMBER_COLUMN_ISACTIVE = "IsActive"
+        const val MEMBER_COLUMN_ISACTIVE = "IsActive"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
