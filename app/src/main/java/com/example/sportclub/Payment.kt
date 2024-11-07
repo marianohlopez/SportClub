@@ -46,7 +46,7 @@ class Payment : AppCompatActivity() {
         val buttonSubmitPayment = findViewById<Button>(R.id.buttonSubmitPayment)
         val buttonSubmitReceipt = findViewById<Button>(R.id.buttonSubmitReceipt)
         val imageClubPayment = findViewById<ImageView>(R.id.imageClubPayment)
-
+        val checkboxIsMember = findViewById<CheckBox>(R.id.checkboxIsMember)
         imageClubPayment.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -80,16 +80,20 @@ class Payment : AppCompatActivity() {
             paymentMethod = if (checkboxCash.isChecked) "Efectivo" else "Tarjeta"
 
             // Activar miembro en la base de datos
-            val result = dbHelper.activateMember(dni)
-            if (result != -1) {
-                paidDNI = dni
-                paidAmount = amount
+            if (!checkboxIsMember.isChecked) {
+                val result = dbHelper.activateMember(dni)
+                if (result != -1) {
+                    paidDNI = dni
+                    paidAmount = amount
 
-                Toast.makeText(this, "Cuota pagada exitosamente", Toast.LENGTH_SHORT).show()
-                clearFields()
-            } else {
-                Toast.makeText(this, "Error al pagar la cuota", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Cuota pagada exitosamente", Toast.LENGTH_SHORT).show()
+                    clearFields()
+                } else {
+                    Toast.makeText(this, "Error al pagar la cuota", Toast.LENGTH_SHORT).show()
+                }
+                return@setOnClickListener
             }
+            Toast.makeText(this, "Cuota pagada exitosamente para el dia", Toast.LENGTH_SHORT).show()
         }
 
         // Generar el PDF al hacer clic en el botón de recibo

@@ -80,21 +80,20 @@
 
     <Button
         android:id="@+id/btnInscription"
-        android:layout_width="190dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:text="INSCRIBIR SOCIO"
-        android:backgroundTint="#2196F3"
         android:layout_marginBottom="16dp"
-        />
+        android:backgroundTint="#2196F3"
+        android:text="INSCRIBIR MIEMBRO"
+        android:textSize="17dp" />
+
     <Button
         android:id="@+id/btnClean"
-        android:layout_width="190dp"
+        android:layout_width="208dp"
         android:layout_height="wrap_content"
-        android:textSize="17dp"
-        android:text="LIMPIAR"
-        android:backgroundTint="#2196F3"
         android:layout_marginBottom="16dp"
-        />
+        android:backgroundTint="#2196F3"
+        android:text="LIMPIAR"
+        android:textSize="17dp" />
 
 </LinearLayout>

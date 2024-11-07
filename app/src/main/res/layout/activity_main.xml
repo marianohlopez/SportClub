@@ -26,15 +26,14 @@
 
         <Button
             android:id="@+id/btnSignUp"
-            android:layout_width="160dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
-            android:text="INSCRIBIR SOCIO"
-            android:backgroundTint="#2196F3"
             android:layout_marginBottom="16dp"
-            />
+            android:backgroundTint="#2196F3"
+            android:text="INSCRIBIR MIEMBRO" />
         <Button
             android:id="@+id/btnListMembers"
-            android:layout_width="160dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="LISTAR SOCIOS"
             android:backgroundTint="#2196F3"
@@ -42,7 +41,7 @@
             />
         <Button
             android:id="@+id/btnPayCourse"
-            android:layout_width="160dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="REALIZAR PAGO"
             android:backgroundTint="#2196F3"
@@ -50,7 +49,7 @@
             />
         <Button
             android:id="@+id/btnMakeCard"
-            android:layout_width="160dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="EMITIR CARNET"
             android:backgroundTint="#2196F3"
