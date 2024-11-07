@@ -138,6 +138,15 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put(MEMBER_COLUMN_ISACTIVE, 1)
+            // Asignar InscriptionDate a la fecha actual
+            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            put(MEMBER_COLUMN_INSCRIPTIONDATE, currentDate)
+
+            // Calcular ExpirationDate 30 días después de la fecha actual
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, 30)
+            val expirationDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+            put(MEMBER_COLUMN_EXPIRATIONDATE, expirationDate)
         }
         // Actualizar solo si IsActive es 0 y el documento coincide
         return db.update(
