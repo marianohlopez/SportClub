@@ -23,7 +23,7 @@ class IssueCardMain : AppCompatActivity() {
     private lateinit var btnSignUp: Button
     private lateinit var btnBack: Button
 
-    @SuppressLint("MissingInflatedId") // Lo recomendó Android Studio
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,10 +42,9 @@ class IssueCardMain : AppCompatActivity() {
 
         imageClub.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent) // Inicia la actividad
+            startActivity(intent)
         }
 
-        // Configura el botón de "Ingresar"
         btnSignUp.setOnClickListener {
             val documentNumber = etIdNumber.text.toString()
             if (documentNumber.isNotEmpty()) {
@@ -55,7 +54,6 @@ class IssueCardMain : AppCompatActivity() {
             }
         }
 
-        // Configura el botón de "Volver"
         btnBack.setOnClickListener {
             finish()
         }
@@ -64,7 +62,8 @@ class IssueCardMain : AppCompatActivity() {
     private fun checkMemberStatus(documentNumber: Int) {
         val db = dbHelper.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT ${DBHelper.MEMBER_COLUMN_ID},${DBHelper.MEMBER_COLUMN_DOCUMENT}, ${DBHelper.MEMBER_COLUMN_ISACTIVE}, ${DBHelper.MEMBER_COLUMN_EXPIRATIONDATE} FROM ${DBHelper.TABLE_MEMBERS} WHERE ${DBHelper.MEMBER_COLUMN_DOCUMENT} = ?",
+            "SELECT ${DBHelper.MEMBER_COLUMN_DOCUMENT}, ${DBHelper.MEMBER_COLUMN_ISACTIVE}, " +
+                    "${DBHelper.MEMBER_COLUMN_EXPIRATIONDATE} FROM ${DBHelper.TABLE_MEMBERS} WHERE ${DBHelper.MEMBER_COLUMN_DOCUMENT} = ?",
             arrayOf(documentNumber.toString())
         )
 
@@ -73,13 +72,11 @@ class IssueCardMain : AppCompatActivity() {
             val isActive = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.MEMBER_COLUMN_ISACTIVE)) == 1
             val expirationDate = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MEMBER_COLUMN_EXPIRATIONDATE))
 
-            // Verifica si el miembro está activo y si su fecha de expiración no ha pasado
             if (!isActive) {
                 showAlert("El socio está inactivo. Por favor, contacte a administración.")
             } else if (isExpired(expirationDate)) {
                 showAlert("El socio debe estar al día con el pago.")
             } else {
-                // Si el socio está activo y al día, procede al siguiente Activity
                 goToIssueCardActivity(memberDocument)
             }
         } else {
@@ -88,7 +85,6 @@ class IssueCardMain : AppCompatActivity() {
         cursor.close()
         db.close()
     }
-
 
     private fun showAlert(message: String) {
         AlertDialog.Builder(this)
@@ -103,9 +99,10 @@ class IssueCardMain : AppCompatActivity() {
         val today = Date()
         return sdf.parse(expirationDate)?.before(today) == true
     }
+
     private fun goToIssueCardActivity(memberDocument: Int) {
         val intent = Intent(this, IssueCard::class.java).apply {
-            putExtra("MEMBER_DOCUMENT", memberDocument)
+            putExtra("MEMBER_DOCUMENT", memberDocument) // Cambiado a MEMBER_DOCUMENT
         }
         startActivity(intent)
     }

@@ -19,12 +19,23 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val btnSignUp = findViewById<Button>(R.id.btnSignUp) // Referencia al botón "Inscribir Socio"
-        val btnMakeCard = findViewById<Button>(R.id.btnMakeCard) // Referencia al botón "Emitir Carnet"
+        val btnSignUp = findViewById<Button>(R.id.btnSignUp)
+        val btnMakeCard = findViewById<Button>(R.id.btnMakeCard)
+        val btnListMembers = findViewById<Button>(R.id.btnListMembers)
+        val btnPayCourse = findViewById<Button>(R.id.btnPayCourse)
 
         btnSignUp.setOnClickListener {
             // Intent para abrir la actividad Inscription
             val intent = Intent(this, Inscription::class.java)
+            startActivity(intent)
+        }
+        btnListMembers.setOnClickListener {
+            val intent = Intent(this, MemberList::class.java)
+            startActivity(intent)
+        }
+
+        btnPayCourse.setOnClickListener {
+            val intent = Intent(this, Payment::class.java)
             startActivity(intent)
         }
 
