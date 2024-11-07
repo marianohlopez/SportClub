@@ -114,7 +114,7 @@ class Payment : AppCompatActivity() {
         paint.textSize = 20f
         paint.color = Color.BLUE
         paint.isFakeBoldText = true
-        canvas.drawText("Recibo de Pago - SportClub", 50f, 50f, paint)
+        canvas.drawText("Recibo de Pago - CDM", 50f, 50f, paint)
 
         // Línea divisoria
         paint.color = Color.GRAY

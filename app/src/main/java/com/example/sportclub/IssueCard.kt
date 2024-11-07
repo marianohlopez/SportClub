@@ -107,7 +107,7 @@ class IssueCard : AppCompatActivity() {
             paint.textSize = 20f
             paint.color = Color.BLUE
             paint.isFakeBoldText = true
-            canvas.drawText("Ficha de Socio - SportClub", 50f, 50f, paint)
+            canvas.drawText("Ficha de Socio - CDM", 50f, 50f, paint)
 
             // Línea divisoria
             paint.color = Color.GRAY
