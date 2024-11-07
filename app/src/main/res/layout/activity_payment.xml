@@ -105,6 +105,20 @@
 
     </androidx.cardview.widget.CardView>
 
+    <CheckBox
+        android:id="@+id/checkboxIsMember"
+        android:layout_width="148dp"
+        android:layout_height="64dp"
+        android:gravity="center"
+        android:text="No Socio"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:backgroundTint="#00203F"
+        app:buttonTint="#FFFFFF"
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="375dp" />
+
     <Button
         android:id="@+id/buttonSubmitPayment"
         android:layout_width="180dp"
