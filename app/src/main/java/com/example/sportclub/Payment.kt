@@ -26,6 +26,7 @@ class Payment : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper
     private var paidDNI: Int? = null
     private var paidAmount: Int? = null
+    private var paymentMethod: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +75,9 @@ class Payment : AppCompatActivity() {
             }
 
             Log.d("PaymentActivity", "Paying member: Document: $dni")
+
+            // Guardar el método de pago antes de limpiar los campos
+            paymentMethod = if (checkboxCash.isChecked) "Efectivo" else "Tarjeta"
 
             // Activar miembro en la base de datos
             val result = dbHelper.activateMember(dni)
@@ -125,24 +129,33 @@ class Payment : AppCompatActivity() {
         paint.textSize = 14f
         paint.isFakeBoldText = false
         canvas.drawText("DNI del Cliente: $dni", 50f, 130f, paint)
-        canvas.drawText("Monto Pagado: $$amount", 50f, 160f, paint)
 
-        // Método de pago
-        val paymentMethod = if (findViewById<CheckBox>(R.id.checkboxCash).isChecked) "Efectivo" else "Tarjeta"
-        canvas.drawText("Método de Pago: $paymentMethod", 50f, 190f, paint)
+        // Método de pago y monto con descuento si es efectivo
+        val paymentMethodText = paymentMethod ?: "Tarjeta"
+        canvas.drawText("Método de Pago: $paymentMethodText", 50f, 160f, paint)
+
+        if (paymentMethodText == "Efectivo") {
+            val discount = (amount * 0.1).toInt()
+            val amountWithDiscount = amount - discount
+            canvas.drawText("Monto Pagado: $$amountWithDiscount", 50f, 190f, paint)
+            canvas.drawText("Descuento 10%: $$discount", 50f, 220f, paint)
+        } else {
+            canvas.drawText("Monto Pagado: $$amount", 50f, 190f, paint)
+        }
 
         // Línea divisoria
-        canvas.drawLine(50f, 210f, 250f, 210f, paint)
+        canvas.drawLine(50f, 240f, 250f, 240f, paint)
 
         // Añadir el logo
         val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.deportivo_mandiyu)
         val resizedLogo = Bitmap.createScaledBitmap(logoBitmap, 100, 100, false)
-        canvas.drawBitmap(resizedLogo, 100f, 220f, null)
+        canvas.drawBitmap(resizedLogo, 100f, 260f, null)
 
         // Mensaje de agradecimiento
         paint.textSize = 12f
         paint.color = Color.DKGRAY
-        canvas.drawText("Gracias por su pago. ¡Disfruta de los beneficios del club!", 50f, 350f, paint)
+        canvas.drawText("Gracias por su pago. ", 50f, 370f, paint)
+        canvas.drawText("¡Disfruta de los beneficios del club!", 50f, 390f, paint)
 
         pdfDocument.finishPage(page)
 
