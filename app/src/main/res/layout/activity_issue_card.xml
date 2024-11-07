@@ -9,7 +9,8 @@
     android:background="#00203F"
     android:orientation="vertical"
     android:gravity="center_horizontal">
-<LinearLayout
+
+    <LinearLayout
     android:id="@+id/layoutImageClubCarnet"
     android:layout_width="match_parent"
     android:layout_height="150dp">
@@ -124,5 +125,13 @@
         android:backgroundTint="#2196F3"
         android:layout_marginBottom="16dp"
         />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#2196F3"
+        android:text="VOLVER" />
 
 </LinearLayout>

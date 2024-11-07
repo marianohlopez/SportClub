@@ -74,6 +74,12 @@ class IssueCard : AppCompatActivity() {
         btnDownloadPDF.setOnClickListener {
             downloadPDF(memberDocument)
         }
+
+        val btnBack = findViewById<Button>(R.id.btnBack)
+        btnBack.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent) // Inicia la actividad
+        }
     }
 
     @SuppressLint("SetTextI18n")
