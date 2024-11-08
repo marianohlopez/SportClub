@@ -162,11 +162,19 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     fun getAllMembers(): ArrayList<Member> {
         val memberList = ArrayList<Member>()
         val db = this.readableDatabase
+
+        // Obtenemos la fecha actual en formato de la base de datos (ej. "YYYY-MM-DD")
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        // Agregamos condiciones para MEMBER_COLUMN_ISACTIVE y MEMBER_COLUMN_EXPIRATIONDATE
+        val selection = "$MEMBER_COLUMN_ISACTIVE = ? AND $MEMBER_COLUMN_EXPIRATIONDATE = ?"
+        val selectionArgs = arrayOf("1", currentDate)
+
         val cursor = db.query(
             TABLE_MEMBERS,
             null,
-            null,
-            null,
+            selection,
+            selectionArgs,
             null,
             null,
             null
@@ -209,6 +217,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
         return memberList
     }
+
 
 
     // Método para obtener los datos de un miembro específico por su DOCUMENTO
