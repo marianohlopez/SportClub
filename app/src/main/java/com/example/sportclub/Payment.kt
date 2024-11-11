@@ -51,6 +51,7 @@ class Payment : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+        checkboxCash.isChecked = true
 
         // Limitar la selección de solo un CheckBox
         checkboxCash.setOnCheckedChangeListener { _, isChecked ->
